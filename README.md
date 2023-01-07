@@ -28,7 +28,7 @@ Be sure you have git installed in your system.
 
 2. Enter to cripto-signal folder `cd Crypto-Signal`
 
-3. Switch to develop branch `git checkout newsiiv`
+3. Switch to develop branch `git checkout axcrypto`
  
 4. Create a config.yml file and put it into "app" folder.
 
