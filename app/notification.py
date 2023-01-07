@@ -26,7 +26,7 @@ from pytz import timezone
 from stockstats import StockDataFrame
 from telegram.error import TimedOut as TelegramTimedOut
 
-from analyzers.indicators import candle_recognition, ichimoku
+from analyzers.indicators import candle_recognition, ichimoku, psar
 from analyzers.utils import IndicatorUtils
 from notifiers.discord_client import DiscordNotifier
 from notifiers.gmail_client import GmailNotifier
@@ -697,10 +697,16 @@ class Notifier(IndicatorUtils):
         plt.rc('grid', color='0.75', linestyle='-', linewidth=0.5)
 
         left, width = 0.1, 0.8
+        # rect5 = [left, 0.80, width, 0.23]
+        # rect1 = [left, 0.69, width, 0.23]
+        # rect2 = [left, 0.51, width, 0.18]
+        # rect3 = [left, 0.35, width, 0.16]
+        # rect4 = [left, 0.08, width, 0.23]
         rect1 = [left, 0.69, width, 0.23]
-        rect2 = [left, 0.51, width, 0.18]
-        rect3 = [left, 0.35, width, 0.16]
-        rect4 = [left, 0.08, width, 0.23]
+        rect5 = [left, 0.59, width, 0.10]
+        rect2 = [left, 0.46, width, 0.13]
+        rect3 = [left, 0.33, width, 0.13]
+        rect4 = [left, 0.08, width, 0.21]
 
         fig = plt.figure(facecolor='white')
         fig.set_size_inches(8, 18, forward=True)
@@ -708,6 +714,7 @@ class Notifier(IndicatorUtils):
 
         # left, bottom, width, height
         ax1 = fig.add_axes(rect1, facecolor=axescolor)
+        ax5 = fig.add_axes(rect5, facecolor=axescolor, sharex=ax1)
         ax2 = fig.add_axes(rect2, facecolor=axescolor, sharex=ax1)
         ax3 = fig.add_axes(rect3, facecolor=axescolor, sharex=ax1)
         ax4 = fig.add_axes(rect4, facecolor=axescolor)
@@ -715,6 +722,14 @@ class Notifier(IndicatorUtils):
         # Plot Candles chart
         candle_pattern = self.candle_check(candles_data, candle_period)
         self.plot_candlestick(ax1, df, candle_period, candle_pattern)
+
+        # Plot PSAR chart in Candles chart
+        ps = psar.PSAR()
+        df_psar = ps.analyze(candles_data)
+        self.plot_psar(ax1,df_psar,candle_period)
+
+        # Plot volume chart  <-- should be added
+        self.plot_volume(ax5, df)
 
         # Plot RSI (14)
         self.plot_rsi(ax2, df)
@@ -944,6 +959,41 @@ class Notifier(IndicatorUtils):
                 transform=ax.transAxes,  fontsize=textsize, va='top')
         ax.text(0.46, 0.94, 'EMA (99, close)', color='firebrick',
                 transform=ax.transAxes,  fontsize=textsize, va='top')
+        ax.text(0.66, 0.94, f'PSAR({candle_period})', color='blue',
+                transform=ax.transAxes,  fontsize=textsize, va='top')
+                
+    def plot_psar(self, ax, df, candle_period):
+        # ax1
+        textsize = 11
+        if(df['psar'].count() > 120):
+            df = df.iloc[-120:]
+
+        colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
+        psar_bull = df.loc[df['is_hot']]['psar']
+        psar_bear = df.loc[df['is_cold']]['psar']           
+        ax.scatter(psar_bull.index, psar_bull, color=colors[1], label='Up Trend', marker='o', s=4)
+        ax.scatter(psar_bear.index, psar_bear, color=colors[3], label='Down Trend', marker='o', s=4)
+            
+    def plot_volume(self, ax, df):
+        # ax5
+        textsize = 11
+        fillcolor = 'darkmagenta'
+
+        vol = df["volume"]
+
+        if(df['volume'].count() > 120):
+            df = df.iloc[-120:]
+            vol = vol[-120:]
+
+        maxvol = df.volume.max()
+
+        # ax.plot(df.index, vol, color=fillcolor, linewidth=0.5)
+        bar_width = 0.8/120.0
+        ax.bar(df.index, vol, width=bar_width, color="blue", alpha=0.4)
+
+        ax.set_ylim(0, maxvol*1.1)
+        ax.text(0.024, 0.94, 'Volume', va='top',
+                transform=ax.transAxes, fontsize=textsize)
 
     def plot_rsi(self, ax, df):
         textsize = 11
