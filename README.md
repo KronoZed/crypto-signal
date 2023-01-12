@@ -20,6 +20,7 @@ Development branch to testing new features. This develop version has a lot of im
 - New indicator and informant PSAR (Parabolic Stop And Reverse) added
 - Volume added in the charts below candlestick figure
 - PSAR added into the candlestick chart to show the trend
+- TEMA (triple EMA with default periods 8, 13, 21) added as an indicator
 
 
 ## Installing And Running
@@ -83,6 +84,24 @@ indicators:
       candle_period: 1d
       period_count: 14      
       mute_cold: true
+  tema:
+    - enabled: true
+      alert_enabled: true
+      alert_frequency: once
+      signal:
+        - short
+        - middle
+        - long
+        - buy
+        - sell
+      hot: 0
+      cold: 0
+      hot_label: ' BUY tema(10,50,200)'
+      cold_label: ' SELL tema(10,50,200)'
+      candle_period: 15m
+      short_period: 10
+      middle_period: 50
+      long_period: 200      
 ```
 
 #### Charts
@@ -182,6 +201,12 @@ informants:
             - close
           candle_period: 4h
           period_count: 14
+    psar:
+      - enabled: true
+        signal:
+          - psar
+        candle_period: 1h
+          
 ```
 
 #### Candlestick Pattern Recognition - candle_recognition
