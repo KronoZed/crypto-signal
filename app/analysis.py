@@ -50,6 +50,7 @@ class StrategyAnalyzer():
             'stochrsi_cross': stochrsi_cross.StochRSICross().analyze,
             'sqzmom': sqzmom.SQZMOM().analyze,
             'psar': psar.PSAR().analyze,
+            'tema': tema.TEMA().analyze,
         }
 
         return dispatcher

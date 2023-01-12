@@ -19,5 +19,6 @@ __all__ = [
     'macd_cross',
     'stochrsi_cross',
     'sqzmom',
-    'psar'
+    'psar',
+    'tema'
 ]

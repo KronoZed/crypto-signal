@@ -164,6 +164,11 @@ indicators:
       cold_label: ' Increase in Volume Downtrend'
       candle_period: 15m
       chart: true
+  psar:
+    - enabled: false
+      signal:
+        - psar
+      candle_period: 15m
 informants:
   lrsi:
     - enabled: true
