@@ -6,3 +6,10 @@ config.yml
 lib/ta-lib/
 app/charts
 app/user_data
+*.log
+PROBLEMS.txt
+env
+venv
+config.json
+__pycache__
+*.pyc

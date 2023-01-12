@@ -17,6 +17,9 @@ Development branch to testing new features. This develop version has a lot of im
 - New indicator Sqzmon - Squeeze Momentum Indicator
 - New option to customize ichimoku strategies and added chikou span
 - New indicator siiv (Signed Increase In Volume) It is a slightly revised version of iiv. It shows the direction of price chage also.
+- New indicator and informant PSAR (Parabolic Stop And Reverse) added
+- Volume added in the charts below candlestick figure
+- PSAR added into the candlestick chart to show the trend
 
 
 ## Installing And Running
@@ -28,7 +31,7 @@ Be sure you have git installed in your system.
 
 2. Enter to cripto-signal folder `cd Crypto-Signal`
 
-3. Switch to develop branch `git checkout axcrypto`
+3. Switch to axcrypto branch `git checkout axcrypto`
  
 4. Create a config.yml file and put it into "app" folder.
 
@@ -38,7 +41,7 @@ Be sure you have git installed in your system.
 
 7. For production run in daemon mode using "-d" option `docker run --rm -di -v  $PWD/app:/app dev/crypto-signals:latest`
 
-8. If you want to run the script without docker, do the following intesd of items 5, 6, and 7:
+8. If you want to run the script without docker, do the following instead of items 5, 6, and 7:
 
 9. python3 -m venv env
 
@@ -433,6 +436,50 @@ indicators:
 ```
 
 Of course, this indicator can be used in other candle periods, 5m, 1h.. etc.
+
+
+#### Parabolic Stop And Reverse - psar
+
+There is a new indicator called "psar". It is used to see the trend of price changes.
+
+```
+indicators:
+  psar:
+    - enabled: true
+      alert_enabled: true
+      alert_frequency: always
+      signal:
+        - psar
+      hot: 0
+      cold: 0
+      hot_label: ' Downtrend'
+      cold_label: ' Uptrend'
+      candle_period: 5m
+      chart: true
+    - enabled: true
+      alert_enabled: true
+      alert_frequency: always
+      signal:
+        - siiv
+      hot: 0
+      cold: 0
+      hot_label: ' Downtrend'
+      cold_label: ' Uptrend'
+      candle_period: 15m
+      chart: true
+```
+
+If you don't want to receive such notifications just disable the psar indicator in your config file.
+
+```
+indicators:
+  psar:
+    - enabled: false
+      candle_period: 15m
+```
+
+This indicator can be used in other candle periods, 5m, 1h.. etc.
+
 
 #### Moving Average Ribbon
 
