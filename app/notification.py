@@ -518,8 +518,13 @@ class Notifier(IndicatorUtils):
 
                                     values[signal] = analysis['result'].iloc[-1][signal]
                                     if isinstance(values[signal], float):
-                                        values[signal] = format(
-                                            values[signal], '.2f')
+                                        if values[signal] > 1:
+                                            values[signal] = format(
+                                                values[signal], '.2f')
+                                        else:
+                                            values[signal] = format(
+                                                values[signal], '.8f')
+
                             elif indicator_type == 'crossovers':
                                 latest_result = analysis['result'].iloc[-1]
 
@@ -535,13 +540,21 @@ class Notifier(IndicatorUtils):
 
                                 values[key_signal] = analysis['result'].iloc[-1][key_signal]
                                 if isinstance(values[key_signal], float):
-                                    values[key_signal] = format(
-                                        values[key_signal], '.2f')
+                                    if values[key_signal] > 1:
+                                        values[key_signal] = format(
+                                            values[signal], '.2f')
+                                    else:
+                                        values[key_signal] = format(
+                                            values[key_signal], '.8f')
 
                                 values[crossed_signal] = analysis['result'].iloc[-1][crossed_signal]
                                 if isinstance(values[crossed_signal], float):
-                                    values[crossed_signal] = format(
-                                        values[crossed_signal], '.2f')
+                                    if values[crossed_signal] > 1:
+                                        values[crossed_signal] = format(
+                                            values[crossed_signal], '.2f')
+                                    else:
+                                        values[crossed_signal] = format(
+                                            values[crossed_signal], '.8f')
 
                             status = 'neutral'
                             if latest_result['is_hot']:
@@ -618,7 +631,10 @@ class Notifier(IndicatorUtils):
                                     lrsi = ''
                                     if candle_period in lrsi_values[exchange][market_pair]:
                                         lrsi = lrsi_values[exchange][market_pair][candle_period]['lrsi']
-                                        lrsi = format(lrsi, '.2f')
+                                        if lrsi > 1:
+                                            lrsi = format(lrsi, '.2f')
+                                        else:
+                                            lrsi = format(lrsi, '.8f')
 
                                     """
                                     new_message = message_template.render(
