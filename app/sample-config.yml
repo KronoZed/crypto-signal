@@ -243,6 +243,24 @@ indicators:
       candle_period: 1d
       signal:
         - close
+  tema:
+    - enabled: true
+      alert_enabled: true
+      alert_frequency: once
+      signal:
+        - short
+        - middle
+        - long
+        - buy
+        - sell
+      hot: 0
+      cold: 0
+      hot_label: ' BUY tema(10,50,200)'
+      cold_label: ' SELL tema(10,50,200)'
+      candle_period: 15m
+      short_period: 10
+      middle_period: 50
+      long_period: 200
 informants:
   vwap:
     - enabled: false
@@ -275,7 +293,11 @@ informants:
         - close
       candle_period: 1d
       period_count: 15
-
+  psar:
+    - enabled: true
+      signal:
+        - psar
+      candle_period: 1h
 notifiers:
   telegram:
     required:

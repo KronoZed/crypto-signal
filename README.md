@@ -20,7 +20,7 @@ Development branch to testing new features. This develop version has a lot of im
 - New indicator and informant PSAR (Parabolic Stop And Reverse) added
 - Volume added in the charts below candlestick figure
 - PSAR added into the candlestick chart to show the trend
-- TEMA (triple EMA with default periods 8, 13, 21) added as an indicator
+- TEMA (triple EMA with default periods 8, 13, 21) added as an indicator and informant
 
 
 ## Installing And Running

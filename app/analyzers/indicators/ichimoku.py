@@ -78,8 +78,11 @@ class Ichimoku(IndicatorUtils):
             newindex = pandas.date_range(last_time + timedelta,
                                             freq=timedelta,
                                             periods=cloud_displacement)
-            ichimoku_values = ichimoku_values.append(
-                pandas.DataFrame(index=newindex))
+            # append() replaced with pandas.concat() by ahmetax  in 2023.01.19
+            # ichimoku_values = ichimoku_values.append(
+            #     pandas.DataFrame(index=newindex))
+            ichimoku_values = pandas.concat([ichimoku_values,pandas.DataFrame(index=newindex)],
+            sort=False)
             # cloud offset
             ichimoku_values['leading_span_a'] = ichimoku_values['leading_span_a'].shift(
                 cloud_displacement)
